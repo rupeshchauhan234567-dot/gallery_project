@@ -1,0 +1,1930 @@
+@import "tailwindcss";
+
+/* =========================================================
+   BASIC ANIMATIONS
+========================================================= */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@theme {
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@theme {
+  --animate-float: float 4s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   AUTO SCROLL CARDS
+========================================================= */
+
+@keyframes pixelvault-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-pixelvault-scroll {
+  animation: pixelvault-scroll 35s linear infinite;
+}
+
+.animate-pixelvault-scroll:hover {
+  animation-play-state: paused;
+}
+
+
+/* =========================================================
+   PIXELVAULT FLOAT + GLOW
+========================================================= */
+
+@keyframes pixelvault-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-18px);
+  }
+}
+
+@keyframes pixelvault-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.pixelvault-float {
+  animation: pixelvault-float 7s ease-in-out infinite;
+}
+
+.pixelvault-glow {
+  animation: pixelvault-glow 5s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   PREMIUM SELECTION
+========================================================= */
+
+::selection {
+  background: rgba(124, 58, 237, 0.35);
+  color: white;
+}
+
+
+/* =========================================================
+   PREMIUM SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    #7c3aed,
+    #2563eb
+  );
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    #9333ea,
+    #3b82f6
+  );
+}
+
+
+/* =========================================================
+   PIXELVAULT PREMIUM DESIGN SYSTEM
+========================================================= */
+
+@keyframes pv-orb-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(0, -25px, 0) scale(1.05);
+  }
+}
+
+@keyframes pv-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes pv-shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.pv-orb {
+  animation: pv-orb-float 8s ease-in-out infinite;
+}
+
+.pv-glow {
+  animation: pv-glow-pulse 5s ease-in-out infinite;
+}
+
+.pv-glass {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.pv-gradient-text {
+  background: linear-gradient(
+    90deg,
+    #4f46e5,
+    #7c3aed,
+    #a855f7,
+    #2563eb
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.pv-neon-border {
+  position: relative;
+}
+
+.pv-neon-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+
+  background: linear-gradient(
+    120deg,
+    #4f46e5,
+    #7c3aed,
+    #a855f7,
+    #2563eb
+  );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.pv-neon-border:hover::before {
+  opacity: 1;
+}
+
+.pv-premium-shadow {
+  box-shadow:
+    0 20px 60px rgba(79, 70, 229, 0.08),
+    0 10px 30px rgba(124, 58, 237, 0.06);
+}
+
+.pv-dark-shadow {
+  box-shadow:
+    0 20px 70px rgba(0, 0, 0, 0.35),
+    0 0 40px rgba(79, 70, 229, 0.08);
+}
+
+
+/* =========================================================
+   NAVBAR SHIMMER
+========================================================= */
+
+@keyframes pv-navbar-shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+.animate-pv-navbar-shimmer {
+  animation: pv-navbar-shimmer 3s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+@keyframes pv-hero-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-hero-reveal {
+  animation:
+    pv-hero-reveal
+    0.8s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+.pv-delay-1 {
+  animation-delay: 120ms;
+}
+
+.pv-delay-2 {
+  animation-delay: 220ms;
+}
+
+.pv-delay-3 {
+  animation-delay: 320ms;
+}
+
+.pv-delay-4 {
+  animation-delay: 420ms;
+}
+
+
+@keyframes pv-hero-image {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pv-hero-image {
+  animation:
+    pv-hero-image
+    1s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    180ms
+    both;
+}
+
+
+@keyframes pv-line-grow {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.pv-line-grow {
+  animation:
+    pv-line-grow
+    0.7s
+    ease-out
+    250ms
+    both;
+}
+
+
+@keyframes pv-hero-orb {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(10px, -18px, 0);
+  }
+}
+
+.pv-hero-orb {
+  animation: pv-hero-orb 6s ease-in-out infinite;
+}
+
+
+@keyframes pv-floating-card {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+.pv-floating-card {
+  animation: pv-floating-card 5s ease-in-out infinite;
+}
+
+
+@keyframes pv-orb-reverse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(0, 25px, 0) scale(1.05);
+  }
+}
+
+.pv-orb-reverse {
+  animation: pv-orb-reverse 9s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   PHOTO OF THE DAY
+========================================================= */
+
+@keyframes pv-potd-heading {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-potd-heading {
+  animation:
+    pv-potd-heading
+    0.8s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+
+@keyframes pv-potd-badge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.pv-potd-badge {
+  animation: pv-potd-badge 4s ease-in-out infinite;
+}
+
+
+@keyframes pv-potd-card {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pv-potd-card {
+  animation:
+    pv-potd-card
+    1s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    150ms
+    both;
+}
+
+
+@keyframes pv-potd-content {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-potd-content {
+  animation:
+    pv-potd-content
+    0.8s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    400ms
+    both;
+}
+
+
+/* =========================================================
+   PHOTO CARD
+========================================================= */
+
+@keyframes pv-heart-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.4;
+  }
+
+  60% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pv-photo-card {
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+.pv-photo-card:hover {
+  filter: brightness(1.03);
+}
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+@keyframes pv-about-eyebrow {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    letter-spacing: 0.15em;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.35em;
+  }
+}
+
+.pv-about-eyebrow {
+  animation: pv-about-eyebrow 0.7s ease-out both;
+}
+
+
+@keyframes pv-about-heading {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-about-main-heading {
+  animation:
+    pv-about-heading
+    0.9s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    100ms
+    both;
+}
+
+
+@keyframes pv-about-intro {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-about-intro {
+  animation: pv-about-intro 0.8s ease-out 250ms both;
+}
+
+
+@keyframes pv-about-panel {
+  from {
+    opacity: 0;
+    transform: translateY(35px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pv-about-panel {
+  animation:
+    pv-about-panel
+    1s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    350ms
+    both;
+}
+
+
+@keyframes pv-about-copy {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.pv-about-copy {
+  animation:
+    pv-about-copy
+    0.9s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    500ms
+    both;
+}
+
+
+@keyframes pv-about-values {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.pv-about-values {
+  animation:
+    pv-about-values
+    0.9s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    550ms
+    both;
+}
+
+
+@keyframes pv-about-value {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-about-value:nth-child(1) {
+  animation: pv-about-value 0.6s ease-out 650ms both;
+}
+
+.pv-about-value:nth-child(2) {
+  animation: pv-about-value 0.6s ease-out 750ms both;
+}
+
+.pv-about-value:nth-child(3) {
+  animation: pv-about-value 0.6s ease-out 850ms both;
+}
+
+
+@keyframes pv-about-orb-one {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(25px, -20px, 0);
+  }
+}
+
+.pv-about-orb-one {
+  animation: pv-about-orb-one 8s ease-in-out infinite;
+}
+
+
+@keyframes pv-about-orb-two {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(-25px, 20px, 0);
+  }
+}
+
+.pv-about-orb-two {
+  animation: pv-about-orb-two 9s ease-in-out infinite;
+}
+
+
+@keyframes pv-about-border {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.pv-about-border {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.25),
+    rgba(59, 130, 246, 0.25),
+    transparent
+  );
+
+  animation: pv-about-border 6s linear infinite;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+@keyframes pv-footer-orb-one {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(35px, -25px, 0) scale(1.08);
+  }
+}
+
+@keyframes pv-footer-orb-two {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-35px, 30px, 0) scale(1.05);
+  }
+}
+
+@keyframes pv-footer-orb-three {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.15);
+  }
+}
+
+.pv-footer-orb-one {
+  animation: pv-footer-orb-one 9s ease-in-out infinite;
+}
+
+.pv-footer-orb-two {
+  animation: pv-footer-orb-two 10s ease-in-out infinite;
+}
+
+.pv-footer-orb-three {
+  animation: pv-footer-orb-three 8s ease-in-out infinite;
+}
+
+
+/* FOOTER CTA */
+
+@keyframes pv-footer-cta {
+  from {
+    opacity: 0;
+    transform: translateY(35px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pv-footer-cta {
+  animation:
+    pv-footer-cta
+    1s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+
+@keyframes pv-footer-heading {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-footer-heading {
+  animation:
+    pv-footer-heading
+    0.8s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    150ms
+    both;
+}
+
+
+/* FOOTER BORDER */
+
+@keyframes pv-footer-border {
+  from {
+    left: -60%;
+  }
+
+  to {
+    left: 120%;
+  }
+}
+
+.pv-footer-border {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.25),
+    rgba(59, 130, 246, 0.25),
+    transparent
+  );
+
+  transform: skewX(-20deg);
+
+  animation:
+    pv-footer-border
+    6s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   UNIVERSAL BUTTON SHINE
+   IMPORTANT:
+   Gallery + Footer both use this class.
+========================================================= */
+
+.pv-button-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 75%
+  );
+
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+
+.group:hover > .pv-button-shine,
+button:hover > .pv-button-shine,
+.pv-footer-explore-btn:hover .pv-button-shine,
+.pv-send-button:hover .pv-button-shine {
+  transform: translateX(120%);
+}
+
+
+/* =========================================================
+   FOOTER FORM
+========================================================= */
+
+.pv-contact-card {
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.pv-contact-card:hover {
+  transform: translateY(-2px);
+}
+
+
+@keyframes pv-form-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.15);
+  }
+}
+
+.pv-form-glow {
+  animation: pv-form-glow 5s ease-in-out infinite;
+}
+
+
+.pv-input-wrap {
+  position: relative;
+}
+
+.pv-input-number {
+  position: absolute;
+  z-index: 5;
+
+  left: 12px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+
+  color: rgba(139, 92, 246, 0.55);
+
+  pointer-events: none;
+
+  transition:
+    transform 0.35s ease,
+    color 0.35s ease,
+    opacity 0.35s ease;
+}
+
+.pv-message-number {
+  top: 17px;
+  transform: none;
+}
+
+
+/* INPUT */
+
+.pv-contact-input {
+  position: relative;
+
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    background-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.pv-contact-input:hover {
+  transform: translateY(-1px);
+}
+
+.pv-contact-input:focus {
+  transform: translateY(-2px) scale(1.005);
+
+  border-color: rgba(139, 92, 246, 0.65);
+
+  box-shadow:
+    0 0 0 3px rgba(139, 92, 246, 0.08),
+    0 10px 30px rgba(124, 58, 237, 0.08);
+}
+
+.pv-input-wrap:focus-within .pv-input-number {
+  color: rgb(167, 139, 250);
+  transform: translateY(-50%) scale(1.2);
+}
+
+.pv-input-wrap:focus-within .pv-message-number {
+  transform: scale(1.2);
+}
+
+.pv-contact-input:not(:placeholder-shown) {
+  border-color: rgba(139, 92, 246, 0.25);
+}
+
+
+/* INPUT ACTIVE LINE */
+
+.pv-input-wrap::after {
+  content: "";
+
+  position: absolute;
+
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+
+  height: 1px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #8b5cf6,
+    #3b82f6,
+    transparent
+  );
+
+  transform: scaleX(0);
+  transform-origin: center;
+
+  opacity: 0;
+
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.35s ease;
+}
+
+.pv-input-wrap:focus-within::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+
+/* SEND BUTTON */
+
+.pv-send-button {
+  isolation: isolate;
+}
+
+.pv-send-button::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.18),
+    transparent 35%,
+    transparent 65%,
+    rgba(255, 255, 255, 0.12)
+  );
+
+  opacity: 0;
+
+  transition: opacity 0.3s ease;
+}
+
+.pv-send-button:hover::before {
+  opacity: 1;
+}
+
+
+/* FORM RESULT */
+
+@keyframes pv-form-result {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pv-form-result {
+  display: inline-flex;
+  align-items: center;
+
+  animation:
+    pv-form-result
+    0.4s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+
+/* FOOTER COLUMNS */
+
+@keyframes pv-footer-column {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-footer-column {
+  animation:
+    pv-footer-column
+    0.7s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+.pv-footer-column:nth-child(1) {
+  animation-delay: 200ms;
+}
+
+.pv-footer-column:nth-child(2) {
+  animation-delay: 300ms;
+}
+
+.pv-footer-column:nth-child(3) {
+  animation-delay: 400ms;
+}
+
+
+/* FOOTER LINKS */
+
+.pv-footer-link {
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+}
+
+.pv-footer-link:hover {
+  transform: translateX(4px);
+}
+
+
+/* SOCIAL */
+
+.pv-social-icon {
+  display: flex;
+
+  height: 44px;
+  width: 44px;
+
+  align-items: center;
+  justify-content: center;
+
+  border-width: 1px;
+  border-radius: 9999px;
+
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.pv-social-icon:hover {
+  transform:
+    translateY(-6px)
+    rotate(-5deg)
+    scale(1.08);
+
+  box-shadow:
+    0 12px 30px rgba(79, 70, 229, 0.15);
+}
+
+.pv-social-icon:active {
+  transform: scale(0.92);
+}
+
+
+/* FOOTER BOTTOM */
+
+@keyframes pv-footer-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-footer-bottom {
+  animation:
+    pv-footer-bottom
+    0.7s
+    ease-out
+    600ms
+    both;
+}
+
+
+/* =========================================================
+   GALLERY
+========================================================= */
+
+@keyframes pv-gallery-eyebrow {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    letter-spacing: 0.15em;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.25em;
+  }
+}
+
+.pv-gallery-eyebrow {
+  animation: pv-gallery-eyebrow 0.7s ease-out both;
+}
+
+
+@keyframes pv-gallery-heading {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-gallery-heading {
+  animation:
+    pv-gallery-heading
+    0.8s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    100ms
+    both;
+}
+
+
+@keyframes pv-gallery-description {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-gallery-description {
+  animation:
+    pv-gallery-description
+    0.8s
+    ease-out
+    220ms
+    both;
+}
+
+
+/* GALLERY CONTROLS */
+
+@keyframes pv-gallery-controls {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pv-gallery-controls {
+  position: relative;
+
+  animation:
+    pv-gallery-controls
+    0.9s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    320ms
+    both;
+}
+
+
+/* Animated border */
+
+@keyframes pv-gallery-border-flow {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.pv-gallery-controls::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.16),
+    rgba(59, 130, 246, 0.16),
+    transparent
+  );
+
+  background-size: 200% 100%;
+
+  animation:
+    pv-gallery-border-flow
+    6s
+    linear
+    infinite;
+
+  mask-image:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+  mask-composite: exclude;
+
+  -webkit-mask-image:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+  -webkit-mask-composite: xor;
+
+  padding: 1px;
+}
+
+
+/* PAGE COUNTER */
+
+@keyframes pv-gallery-page {
+  from {
+    opacity: 0;
+    transform: translateX(20px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.pv-gallery-page {
+  position: relative;
+
+  animation:
+    pv-gallery-page
+    0.7s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    350ms
+    both;
+}
+
+
+@keyframes pv-page-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+
+.pv-page-dot {
+  display: inline-block;
+
+  width: 5px;
+  height: 5px;
+
+  margin-left: 8px;
+
+  border-radius: 999px;
+
+  background: rgb(139 92 246);
+
+  box-shadow:
+    0 0 12px rgba(139, 92, 246, 0.8);
+
+  animation:
+    pv-page-dot
+    2s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   GALLERY SEARCH
+========================================================= */
+
+.pv-gallery-search-wrap {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pv-gallery-search-wrap:focus-within {
+  transform: translateY(-2px);
+}
+
+.pv-gallery-search {
+  position: relative;
+
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.4s ease,
+    transform 0.3s ease;
+}
+
+.pv-gallery-search:hover {
+  transform: translateY(-1px);
+}
+
+.pv-gallery-search:focus {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(139, 92, 246, 0.07),
+    0 12px 35px rgba(79, 70, 229, 0.1);
+}
+
+.pv-gallery-search-wrap::after {
+  content: "";
+
+  position: absolute;
+
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+
+  height: 2px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #8b5cf6,
+    #3b82f6,
+    transparent
+  );
+
+  transform: scaleX(0);
+  transform-origin: center;
+
+  opacity: 0;
+
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.35s ease;
+}
+
+.pv-gallery-search-wrap:focus-within::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+
+/* CLEAR BUTTON */
+
+.pv-gallery-clear {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.pv-gallery-clear:hover {
+  transform:
+    translateY(-50%)
+    scale(1.06);
+
+  box-shadow:
+    0 6px 20px rgba(124, 58, 237, 0.16);
+}
+
+.pv-gallery-clear:active {
+  transform:
+    translateY(-50%)
+    scale(0.94);
+}
+
+
+/* =========================================================
+   FAVORITES
+========================================================= */
+
+.pv-gallery-favorite {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    background-color 0.35s ease;
+}
+
+.pv-gallery-favorite:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 30px rgba(124, 58, 237, 0.15);
+}
+
+.pv-gallery-favorite:active {
+  transform: translateY(0) scale(0.96);
+}
+
+
+.pv-heart-icon {
+  display: inline-block;
+
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.35s ease;
+}
+
+.pv-gallery-favorite:hover .pv-heart-icon {
+  transform: scale(1.3);
+
+  filter:
+    drop-shadow(
+      0 0 8px
+      rgba(248, 113, 113, 0.65)
+    );
+}
+
+
+/* =========================================================
+   MOOD BUTTONS
+========================================================= */
+
+@keyframes pv-mood-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pv-mood-button {
+  animation:
+    pv-mood-enter
+    0.55s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.pv-mood-button:hover {
+  transform:
+    translateY(-3px)
+    scale(1.03);
+
+  box-shadow:
+    0 10px 25px rgba(124, 58, 237, 0.12);
+}
+
+.pv-mood-button:active {
+  transform:
+    translateY(-1px)
+    scale(0.96);
+}
+
+
+.pv-mood-icon {
+  display: inline-block;
+
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.4s ease;
+}
+
+.pv-mood-button:hover .pv-mood-icon {
+  transform:
+    rotate(-8deg)
+    scale(1.25);
+
+  filter:
+    drop-shadow(
+      0 0 6px
+      rgba(139, 92, 246, 0.5)
+    );
+}
+
+
+/* LABEL + COUNT */
+
+@keyframes pv-small-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-mood-label {
+  animation:
+    pv-small-fade
+    0.7s
+    ease-out
+    500ms
+    both;
+}
+
+.pv-photo-count {
+  animation:
+    pv-small-fade
+    0.7s
+    ease-out
+    550ms
+    both;
+}
+
+
+/* =========================================================
+   GALLERY GRID
+========================================================= */
+
+@keyframes pv-grid-reveal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.pv-gallery-grid {
+  animation:
+    pv-grid-reveal
+    0.8s
+    ease-out
+    450ms
+    both;
+}
+
+
+/* =========================================================
+   GALLERY LOADER
+========================================================= */
+
+@keyframes pv-gallery-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pv-loader-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0
+      rgba(139, 92, 246, 0);
+  }
+
+  50% {
+    box-shadow:
+      0 0 25px
+      rgba(139, 92, 246, 0.25);
+  }
+}
+
+.pv-gallery-loader {
+  animation:
+    pv-gallery-spin
+    0.8s
+    linear
+    infinite,
+    pv-loader-glow
+    1.8s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+@keyframes pv-empty-state {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pv-empty-state {
+  animation:
+    pv-empty-state
+    0.7s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+
+@keyframes pv-empty-icon {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-6px) rotate(-4deg);
+  }
+}
+
+.pv-empty-icon {
+  animation:
+    pv-empty-icon
+    3s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   RESET BUTTON
+========================================================= */
+
+.pv-reset-button {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.pv-reset-button:hover {
+  transform: translateY(-3px);
+
+  background-color: rgb(37 99 235);
+
+  box-shadow:
+    0 12px 30px rgba(37, 99, 235, 0.25);
+}
+
+.pv-reset-button:active {
+  transform:
+    translateY(-1px)
+    scale(0.96);
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+@keyframes pv-pagination-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pv-gallery-pagination {
+  animation:
+    pv-pagination-enter
+    0.8s
+    ease-out
+    700ms
+    both;
+}
+
+
+/* =========================================================
+   GLOBAL BUTTON FEEDBACK
+========================================================= */
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active {
+  transition-duration: 0.08s;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Global */
+  .animate-pixelvault-scroll,
+  .pixelvault-float,
+  .pixelvault-glow,
+  .pv-orb,
+  .pv-glow,
+  .animate-pv-navbar-shimmer,
+
+  /* Hero */
+  .pv-hero-reveal,
+  .pv-hero-image,
+  .pv-line-grow,
+  .pv-hero-orb,
+  .pv-floating-card,
+  .pv-orb-reverse,
+
+  /* POTD */
+  .pv-potd-heading,
+  .pv-potd-badge,
+  .pv-potd-card,
+  .pv-potd-content,
+
+  /* About */
+  .pv-about-eyebrow,
+  .pv-about-main-heading,
+  .pv-about-intro,
+  .pv-about-panel,
+  .pv-about-copy,
+  .pv-about-values,
+  .pv-about-value,
+  .pv-about-orb-one,
+  .pv-about-orb-two,
+  .pv-about-border,
+
+  /* Footer */
+  .pv-footer-orb-one,
+  .pv-footer-orb-two,
+  .pv-footer-orb-three,
+  .pv-footer-cta,
+  .pv-footer-heading,
+  .pv-footer-border,
+  .pv-button-shine,
+  .pv-form-glow,
+  .pv-footer-column,
+  .pv-footer-bottom,
+  .pv-form-result,
+
+  /* Gallery */
+  .pv-gallery-eyebrow,
+  .pv-gallery-heading,
+  .pv-gallery-description,
+  .pv-gallery-controls,
+  .pv-gallery-page,
+  .pv-page-dot,
+  .pv-gallery-grid,
+  .pv-mood-button,
+  .pv-mood-label,
+  .pv-photo-count,
+  .pv-gallery-loader,
+  .pv-empty-state,
+  .pv-empty-icon,
+  .pv-gallery-pagination {
+
+    animation: none !important;
+  }
+
+  /* Gallery animated pseudo-element */
+  .pv-gallery-controls::before {
+    animation: none !important;
+  }
+
+  /* Photo cards */
+  .pv-photo-card,
+  .pv-photo-card * {
+    animation: none !important;
+  }
+
+  /* Interactive elements */
+  .pv-gallery-search-wrap,
+  .pv-gallery-search,
+  .pv-gallery-clear,
+  .pv-gallery-favorite,
+  .pv-mood-button,
+  .pv-reset-button,
+  .pv-contact-input,
+  .pv-contact-card,
+  .pv-social-icon,
+  .pv-footer-link {
+    transition: none !important;
+  }
+}
+
