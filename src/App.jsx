@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { ReactLenis } from "lenis/react";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -12,110 +13,57 @@ import BackgroundEffects from "./components/BackgroundEffects";
 import CursorGlow from "./components/CursorGlow";
 import PhotoOfTheDay from "./components/PhotoOfTheDay";
 
-const API_URL = "https://api.pexels.com/v1";
-
 const App = () => {
   // =====================================================
   // FIXED DATA
-  // Hero + Photo of the Day
-  // NEVER changes when Gallery is searched
   // =====================================================
+
   const [userData, setUserData] = useState([]);
 
   // =====================================================
   // GALLERY DATA
-  // Only Gallery uses this
   // =====================================================
+
   const [galleryData, setGalleryData] = useState([]);
 
-  // =====================================================
-  // GALLERY
-  // =====================================================
+  // Gallery page
   const [index, setIndex] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [hasMore, setHasMore] = useState(true);
-  const [galleryLoading, setGalleryLoading] = useState(false);
 
-  // =====================================================
-  // MODAL
-  // =====================================================
+  // Search query
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Image modal
   const [selectedImage, setSelectedImage] = useState(null);
 
-  // =====================================================
-  // THEME
-  // =====================================================
+  // Theme
   const [darkMode, setDarkMode] = useState(true);
-
-  // =====================================================
-  // RESPONSIVE PAGE SIZE
-  // Mobile  = 10
-  // Desktop = 20
-  // =====================================================
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined"
-      ? window.innerWidth < 768
-      : false
-  );
-
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 767px)");
-
-    const handleChange = (event) => {
-      setIsMobile(event.matches);
-    };
-
-    setIsMobile(media.matches);
-
-    media.addEventListener("change", handleChange);
-
-    return () => {
-      media.removeEventListener("change", handleChange);
-    };
-  }, []);
-
-  const perPage = isMobile ? 10 : 20;
 
   // =====================================================
   // FAVORITES
   // =====================================================
-  const [favorites, setFavorites] = useState(() => {
-    try {
-      const saved = localStorage.getItem(
-        "pixelvault-favorites"
-      );
 
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem("pixelvault-favorites");
+
+    return saved ? JSON.parse(saved) : [];
   });
 
   // =====================================================
-  // PEXELS HEADERS
-  // =====================================================
-  const pexelsConfig = {
-    headers: {
-      Authorization:
-        import.meta.env.VITE_PEXELS_API_KEY,
-    },
-  };
-
-  // =====================================================
   // LOAD FIXED DATA
-  //
-  // ONE TIME ONLY
-  //
-  // Hero + POTD never change after search
   // =====================================================
+
   useEffect(() => {
     let cancelled = false;
 
-    const loadFixedData = async () => {
+    const getInitialData = async () => {
       try {
         const response = await axios.get(
-          `${API_URL}/curated`,
+          "https://api.pexels.com/v1/curated",
           {
-            ...pexelsConfig,
+            headers: {
+              Authorization:
+                import.meta.env.VITE_PEXELS_API_KEY,
+            },
             params: {
               page: 1,
               per_page: 20,
@@ -125,18 +73,27 @@ const App = () => {
 
         if (cancelled) return;
 
-        setUserData(response.data.photos || []);
+        console.log(
+          "INITIAL PEXELS DATA:",
+          response.data
+        );
+
+        // Fixed data
+        setUserData(response.data.photos);
+
+        // Initial Gallery data
+        setGalleryData(response.data.photos);
       } catch (error) {
         if (!cancelled) {
-          console.error(
-            "Failed to load fixed Pexels data:",
+          console.log(
+            "Failed to load initial Pexels photos:",
             error
           );
         }
       }
     };
 
-    loadFixedData();
+    getInitialData();
 
     return () => {
       cancelled = true;
@@ -144,65 +101,54 @@ const App = () => {
   }, []);
 
   // =====================================================
-  // LOAD GALLERY
-  //
-  // Gallery only
+  // GALLERY DATA
   // =====================================================
+
   useEffect(() => {
     let cancelled = false;
 
     const query = searchQuery.trim();
 
     const loadGallery = async () => {
-      setGalleryLoading(true);
-
       try {
-        // -------------------------------------------------
-        // PAGE 1 + NO SEARCH
-        //
-        // Reuse already-loaded fixed curated data.
-        // This avoids duplicate API request.
-        // -------------------------------------------------
-        if (!query && index === 1 && userData.length > 0) {
-          const firstPage = userData.slice(0, perPage);
-
-          setGalleryData(firstPage);
-          setHasMore(true); // ✅ FIX
-          setGalleryLoading(false);
-
-          return;
-        }
-
         let response;
 
-        // -------------------------------------------------
-        // CURATED
-        // -------------------------------------------------
+        // -----------------------------------------------
+        // NO SEARCH
+        // -----------------------------------------------
+
         if (!query) {
           response = await axios.get(
-            `${API_URL}/curated`,
+            "https://api.pexels.com/v1/curated",
             {
-              ...pexelsConfig,
+              headers: {
+                Authorization:
+                  import.meta.env.VITE_PEXELS_API_KEY,
+              },
               params: {
                 page: index,
-                per_page: perPage,
+                per_page: 20,
               },
             }
           );
         }
 
-        // -------------------------------------------------
+        // -----------------------------------------------
         // SEARCH
-        // -------------------------------------------------
+        // -----------------------------------------------
+
         else {
           response = await axios.get(
-            `${API_URL}/search`,
+            "https://api.pexels.com/v1/search",
             {
-              ...pexelsConfig,
+              headers: {
+                Authorization:
+                  import.meta.env.VITE_PEXELS_API_KEY,
+              },
               params: {
-                query,
+                query: query,
                 page: index,
-                per_page: perPage,
+                per_page: 20,
               },
             }
           );
@@ -210,25 +156,21 @@ const App = () => {
 
         if (cancelled) return;
 
-        const photos = response.data?.photos || [];
+        console.log(
+          query
+            ? "GALLERY SEARCH RESULTS:"
+            : "GALLERY CURATED RESULTS:",
+          response.data
+        );
 
-        setGalleryData(photos);
-
-        // Pexels gives next_page when another page exists.
-        setHasMore(Boolean(response.data?.next_page));
+        // ONLY Gallery changes
+        setGalleryData(response.data.photos);
       } catch (error) {
         if (!cancelled) {
-          console.error(
+          console.log(
             "Failed to load gallery photos:",
             error
           );
-
-          setGalleryData([]);
-          setHasMore(false);
-        }
-      } finally {
-        if (!cancelled) {
-          setGalleryLoading(false);
         }
       }
     };
@@ -238,11 +180,12 @@ const App = () => {
     return () => {
       cancelled = true;
     };
-  }, [searchQuery, index, perPage, userData]);
+  }, [searchQuery, index]);
 
   // =====================================================
-  // FAVORITES STORAGE
+  // SAVE FAVORITES
   // =====================================================
+
   useEffect(() => {
     localStorage.setItem(
       "pixelvault-favorites",
@@ -253,35 +196,27 @@ const App = () => {
   // =====================================================
   // FAVORITE TOGGLE
   // =====================================================
+
   const toggleFavorite = (photo) => {
-    setFavorites((prev) => {
-      const exists = prev.some(
-        (item) => item.id === photo.id
-      );
-
-      if (exists) {
-        return prev.filter(
-          (item) => item.id !== photo.id
-        );
-      }
-
-      return [...prev, photo];
-    });
+    setFavorites((prev) =>
+      prev.some((item) => item.id === photo.id)
+        ? prev.filter((item) => item.id !== photo.id)
+        : [...prev, photo]
+    );
   };
 
   // =====================================================
   // SELECT PHOTO
   // =====================================================
+
   const handleSelectPhoto = (photo) => {
     setSelectedImage(photo);
   };
 
   // =====================================================
   // SURPRISE ME
-  //
-  // Uses FIXED userData
-  // Search cannot change it
   // =====================================================
+
   const surpriseMe = () => {
     if (userData.length === 0) return;
 
@@ -289,91 +224,129 @@ const App = () => {
       Math.random() * userData.length
     );
 
-    handleSelectPhoto(userData[randomIndex]);
+    const randomPhoto = userData[randomIndex];
+
+    handleSelectPhoto(randomPhoto);
   };
 
   // =====================================================
   // CLOSE MODAL
   // =====================================================
+
   const closeModal = () => {
     setSelectedImage(null);
   };
 
   return (
-    <div
-      className={`
-        relative min-h-screen overflow-x-hidden
-        transition-colors duration-700
-        ${darkMode
-          ? "bg-[#030712] text-white"
-          : "bg-[#f8faff] text-gray-900"
-        }
-      `}
-    >
-      <BackgroundEffects darkMode={darkMode} />
+      <div
+        className={`
+          relative min-h-screen overflow-x-hidden
+          transition-colors duration-700
+          ${
+            darkMode
+              ? "bg-[#030712] text-white"
+              : "bg-[#f8faff] text-gray-900"
+          }
+        `}
+      >
+        {/* =================================================
+            BACKGROUND
+        ================================================= */}
 
-      <CursorGlow darkMode={darkMode} />
+        <BackgroundEffects darkMode={darkMode} />
 
-      <div className="relative z-10">
-        {/* NAVBAR */}
-        <Navbar
-          darkMode={darkMode}
-          setDarkMode={setDarkMode}
-          setSearchQuery={(query) => {
-            setIndex(1);
-            setSearchQuery(query.trim());
-          }}
-        />
+        {/* =================================================
+            CURSOR
+        ================================================= */}
 
-        {/* HERO */}
-        <Hero
-          darkMode={darkMode}
-          surpriseMe={surpriseMe}
-          userData={userData}
-        />
+        <CursorGlow darkMode={darkMode} />
 
-        {/* AUTO SCROLL */}
-        <AutoScrollCards darkMode={darkMode} />
+        <div className="relative z-10">
 
-        {/* PHOTO OF THE DAY */}
-        <PhotoOfTheDay
-          userData={userData}
-          darkMode={darkMode}
-          onSelect={handleSelectPhoto}
-        />
+          {/* =================================================
+              NAVBAR
+          ================================================= */}
 
-        {/* GALLERY */}
-        <Gallery
-          userData={galleryData}
-          darkMode={darkMode}
-          onSelect={handleSelectPhoto}
-          index={index}
-          setIndex={setIndex}
-          favorites={favorites}
-          toggleFavorite={toggleFavorite}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          loading={galleryLoading}
-          hasMore={hasMore}
-        />
+          <Navbar
+            darkMode={darkMode}
+            setDarkMode={setDarkMode}
+            setSearchQuery={(query) => {
+              // New search starts from page 1
+              setIndex(1);
 
-        {/* ABOUT */}
-        <About darkMode={darkMode} />
+              setSearchQuery(query);
+            }}
+          />
 
-        {/* MODAL */}
-        <ImageModal
-          selectedImage={selectedImage}
-          onClose={closeModal}
-          darkMode={darkMode}
-          userData={galleryData}
-          favorites={favorites}
-          toggleFavorite={toggleFavorite}
-        />
+          {/* =================================================
+              HERO / BEAUTIFUL MOMENTS
+          ================================================= */}
 
-        {/* FOOTER */}
-        <Footer darkMode={darkMode} />
+          <Hero
+            darkMode={darkMode}
+            surpriseMe={surpriseMe}
+            userData={userData}
+          />
+
+          {/* =================================================
+              AUTO SCROLL CARDS
+          ================================================= */}
+
+          <AutoScrollCards darkMode={darkMode} />
+
+          {/* =================================================
+              PHOTO OF THE DAY
+          ================================================= */}
+
+          <PhotoOfTheDay
+            userData={userData}
+            darkMode={darkMode}
+            onSelect={handleSelectPhoto}
+          />
+
+          {/* =================================================
+              GALLERY
+          ================================================= */}
+
+          <Gallery
+            userData={galleryData}
+            darkMode={darkMode}
+            onSelect={handleSelectPhoto}
+            index={index}
+            setIndex={setIndex}
+            favorites={favorites}
+            toggleFavorite={toggleFavorite}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+
+          {/* =================================================
+              ABOUT
+          ================================================= */}
+
+          <About darkMode={darkMode} />
+
+          {/* =================================================
+              IMAGE MODAL
+          ================================================= */}
+
+          <ImageModal
+            selectedImage={selectedImage}
+            onClose={closeModal}
+            darkMode={darkMode}
+            userData={galleryData}
+            favorites={favorites}
+            toggleFavorite={toggleFavorite}
+          />
+
+          {/* =================================================
+              FOOTER
+          ================================================= */}
+
+          <Footer darkMode={darkMode} />
+
+        </div>
       </div>
-    </div>
   );
 };
 

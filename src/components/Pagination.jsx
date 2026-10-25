@@ -1,11 +1,13 @@
-
 import React from "react";
+import { useLenis } from "lenis/react";
 
 const Pagination = ({
   index,
   setIndex,
   hasMore = true,
 }) => {
+  const lenis = useLenis();
+
   const changePage = (newPage) => {
     if (newPage < 1) return;
     if (newPage > index && !hasMore) return;
@@ -15,12 +17,12 @@ const Pagination = ({
     requestAnimationFrame(() => {
       const gallery = document.getElementById("gallery");
 
-      if (gallery) {
-        gallery.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
+      if (!gallery || !lenis) return;
+
+      lenis.scrollTo(gallery, {
+        offset: -20,
+        duration: 1.1,
+      });
     });
   };
 
@@ -30,26 +32,24 @@ const Pagination = ({
         type="button"
         onClick={() => changePage(index - 1)}
         disabled={index === 1}
-        className={`
-          rounded-xl border px-4 py-2.5
-          text-sm font-semibold
+        className="
+          rounded-xl border border-white/10
+          bg-white/5 px-4 py-2.5
+          text-sm font-semibold text-white
           transition-all duration-300
+          hover:-translate-y-0.5
+          hover:bg-white/10
           disabled:cursor-not-allowed
           disabled:opacity-30
-          ${
-            index === 1
-              ? ""
-              : "hover:-translate-y-0.5"
-          }
-          ${
-            "border-white/10 bg-white/5 text-white hover:bg-white/10"
-          }
-        `}
+        "
       >
         <span className="hidden sm:inline">
           Previous
         </span>
-        <span className="sm:hidden">←</span>
+
+        <span className="sm:hidden">
+          ←
+        </span>
       </button>
 
       <div
@@ -74,12 +74,9 @@ const Pagination = ({
         onClick={() => changePage(index + 1)}
         disabled={!hasMore}
         className="
-          rounded-xl
-          border border-white/10
-          bg-white/5
-          px-4 py-2.5
-          text-sm font-semibold
-          text-white
+          rounded-xl border border-white/10
+          bg-white/5 px-4 py-2.5
+          text-sm font-semibold text-white
           transition-all duration-300
           hover:-translate-y-0.5
           hover:bg-white/10
@@ -90,7 +87,10 @@ const Pagination = ({
         <span className="hidden sm:inline">
           Next
         </span>
-        <span className="sm:hidden">→</span>
+
+        <span className="sm:hidden">
+          →
+        </span>
       </button>
     </div>
   );

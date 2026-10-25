@@ -1,4 +1,3 @@
-
 import React from "react";
 
 const AutoScrollCards = ({ darkMode }) => {
@@ -102,8 +101,7 @@ const AutoScrollCards = ({ darkMode }) => {
   ];
 
   return (
-    <section className="overflow-hidden bg-transparent py-14">
-
+    <section className="pv-auto-scroll-wrapper bg-transparent py-14">
       {/* Heading */}
       <div className="mx-auto mb-8 max-w-7xl px-6">
         <div className="pv-auto-heading">
@@ -113,11 +111,7 @@ const AutoScrollCards = ({ darkMode }) => {
               font-semibold
               uppercase
               tracking-[0.3em]
-              ${
-                darkMode
-                  ? "text-gray-500"
-                  : "text-gray-400"
-              }
+              ${darkMode ? "text-gray-500" : "text-gray-400"}
             `}
           >
             Explore the feeling
@@ -129,11 +123,7 @@ const AutoScrollCards = ({ darkMode }) => {
               text-2xl
               font-bold
               md:text-3xl
-              ${
-                darkMode
-                  ? "text-white"
-                  : "text-gray-900"
-              }
+              ${darkMode ? "text-white" : "text-gray-900"}
             `}
           >
             More than just photographs.
@@ -141,10 +131,9 @@ const AutoScrollCards = ({ darkMode }) => {
         </div>
       </div>
 
-      {/* Moving Track */}
-      <div className="relative overflow-hidden">
-
-        {/* Edge Fade - Left */}
+      {/* Moving viewport */}
+      <div className="pv-auto-scroll-viewport relative">
+        {/* Left fade */}
         <div
           className={`
             pointer-events-none
@@ -164,7 +153,7 @@ const AutoScrollCards = ({ darkMode }) => {
           `}
         />
 
-        {/* Edge Fade - Right */}
+        {/* Right fade */}
         <div
           className={`
             pointer-events-none
@@ -184,8 +173,8 @@ const AutoScrollCards = ({ darkMode }) => {
           `}
         />
 
+        {/* Horizontal animation */}
         <div className="flex w-max animate-pixelvault-scroll gap-5 px-5">
-
           {cards.map((card, index) => (
             <div
               key={`${card.title}-${index}`}
@@ -228,15 +217,14 @@ const AutoScrollCards = ({ darkMode }) => {
                     `
                 }
               `}
-              style={{
-                animationDelay: `${index * 80}ms`,
-              }}
             >
-
-              {/* IMAGE */}
+              {/* Image */}
               <img
                 src={card.image}
                 alt={card.title}
+                loading="lazy"
+                decoding="async"
+                draggable="false"
                 className="
                   absolute
                   inset-0
@@ -250,7 +238,7 @@ const AutoScrollCards = ({ darkMode }) => {
                 "
               />
 
-              {/* DARK OVERLAY */}
+              {/* Overlay */}
               <div
                 className="
                   absolute
@@ -262,9 +250,10 @@ const AutoScrollCards = ({ darkMode }) => {
                 "
               />
 
-              {/* DECORATIVE GLOW */}
+              {/* Decorative glow */}
               <div
                 className={`
+                  pointer-events-none
                   absolute
                   -right-10
                   -top-10
@@ -284,7 +273,7 @@ const AutoScrollCards = ({ darkMode }) => {
                 `}
               />
 
-              {/* SECOND SUBTLE GLOW */}
+              {/* Secondary glow */}
               <div
                 className="
                   pointer-events-none
@@ -304,10 +293,9 @@ const AutoScrollCards = ({ darkMode }) => {
                 "
               />
 
-              {/* Top Row */}
+              {/* Top row */}
               <div className="relative z-10 flex items-start justify-between">
-
-                {/* ICON */}
+                {/* Icon */}
                 <div
                   className={`
                     flex
@@ -331,7 +319,7 @@ const AutoScrollCards = ({ darkMode }) => {
                   {card.icon}
                 </div>
 
-                {/* TAG */}
+                {/* Tag */}
                 <span
                   className={`
                     text-[10px]
@@ -366,11 +354,7 @@ const AutoScrollCards = ({ darkMode }) => {
                   className={`
                     text-lg
                     font-semibold
-                    ${
-                      darkMode
-                        ? "text-white"
-                        : "text-gray-900"
-                    }
+                    ${darkMode ? "text-white" : "text-gray-900"}
                   `}
                 >
                   {card.title}
@@ -380,11 +364,7 @@ const AutoScrollCards = ({ darkMode }) => {
                   className={`
                     mt-1
                     text-sm
-                    ${
-                      darkMode
-                        ? "text-gray-400"
-                        : "text-gray-500"
-                    }
+                    ${darkMode ? "text-gray-400" : "text-gray-500"}
                   `}
                 >
                   {card.subtitle}
@@ -393,24 +373,22 @@ const AutoScrollCards = ({ darkMode }) => {
 
               {/* Bottom line */}
               <div
-                className={`
+                className="
                   absolute
                   bottom-0
                   left-0
                   h-[2px]
                   w-0
+                  bg-gradient-to-r
+                  from-violet-500
+                  to-blue-500
                   transition-all
                   duration-500
                   group-hover:w-full
-                  ${
-                    darkMode
-                      ? "bg-gradient-to-r from-violet-500 to-blue-500"
-                      : "bg-gradient-to-r from-violet-500 to-blue-500"
-                  }
-                `}
+                "
               />
 
-              {/* Small corner shine */}
+              {/* Corner shine */}
               <div
                 className="
                   pointer-events-none

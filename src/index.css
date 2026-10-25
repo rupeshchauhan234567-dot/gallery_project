@@ -1,8 +1,84 @@
 @import "tailwindcss";
 
 /* =========================================================
+   LENIS / GLOBAL SCROLL FOUNDATION
+   ========================================================= */
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: auto !important;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/*
+  Lenis root state.
+
+  IMPORTANT:
+  - Do not put overflow: hidden on the normal document root.
+  - Do not use scroll-behavior: smooth.
+  - Do not globally disable scroll chaining.
+*/
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+html.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+html.lenis iframe {
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   AUTO SCROLL CARDS
+   ========================================================= */
+
+@keyframes pixelvault-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-pixelvault-scroll {
+  animation: pixelvault-scroll 35s linear infinite;
+  will-change: transform;
+}
+
+.animate-pixelvault-scroll:hover {
+  animation-play-state: paused;
+}
+
+
+/* =========================================================
    BASIC ANIMATIONS
-========================================================= */
+   ========================================================= */
 
 @keyframes fadeInUp {
   from {
@@ -37,79 +113,8 @@
 
 
 /* =========================================================
-   GLOBAL
-========================================================= */
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-
-/* =========================================================
-   AUTO SCROLL CARDS
-========================================================= */
-
-@keyframes pixelvault-scroll {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-pixelvault-scroll {
-  animation: pixelvault-scroll 35s linear infinite;
-}
-
-.animate-pixelvault-scroll:hover {
-  animation-play-state: paused;
-}
-
-
-/* =========================================================
-   PIXELVAULT FLOAT + GLOW
-========================================================= */
-
-@keyframes pixelvault-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-18px);
-  }
-}
-
-@keyframes pixelvault-glow {
-  0%,
-  100% {
-    opacity: 0.45;
-  }
-
-  50% {
-    opacity: 0.8;
-  }
-}
-
-.pixelvault-float {
-  animation: pixelvault-float 7s ease-in-out infinite;
-}
-
-.pixelvault-glow {
-  animation: pixelvault-glow 5s ease-in-out infinite;
-}
-
-
-/* =========================================================
    PREMIUM SELECTION
-========================================================= */
+   ========================================================= */
 
 ::selection {
   background: rgba(124, 58, 237, 0.35);
@@ -119,7 +124,7 @@ body {
 
 /* =========================================================
    PREMIUM SCROLLBAR
-========================================================= */
+   ========================================================= */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -149,7 +154,37 @@ body {
 
 /* =========================================================
    PIXELVAULT PREMIUM DESIGN SYSTEM
-========================================================= */
+   ========================================================= */
+
+@keyframes pixelvault-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -18px, 0);
+  }
+}
+
+.pixelvault-float {
+  animation: pixelvault-float 7s ease-in-out infinite;
+}
+
+@keyframes pixelvault-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.pixelvault-glow {
+  animation: pixelvault-glow 5s ease-in-out infinite;
+}
 
 @keyframes pv-orb-float {
   0%,
@@ -204,11 +239,15 @@ body {
     #a855f7,
     #2563eb
   );
-
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
+
+
+/* =========================================================
+   NEON BORDER
+   ========================================================= */
 
 .pv-neon-border {
   position: relative;
@@ -220,7 +259,6 @@ body {
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-
   background: linear-gradient(
     120deg,
     #4f46e5,
@@ -245,6 +283,11 @@ body {
   opacity: 1;
 }
 
+
+/* =========================================================
+   SHADOW SYSTEM
+   ========================================================= */
+
 .pv-premium-shadow {
   box-shadow:
     0 20px 60px rgba(79, 70, 229, 0.08),
@@ -260,7 +303,7 @@ body {
 
 /* =========================================================
    NAVBAR SHIMMER
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-navbar-shimmer {
   0% {
@@ -279,7 +322,7 @@ body {
 
 /* =========================================================
    HERO
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-hero-reveal {
   from {
@@ -317,7 +360,6 @@ body {
   animation-delay: 420ms;
 }
 
-
 @keyframes pv-hero-image {
   from {
     opacity: 0;
@@ -338,7 +380,6 @@ body {
     180ms
     both;
 }
-
 
 @keyframes pv-line-grow {
   from {
@@ -361,7 +402,6 @@ body {
     both;
 }
 
-
 @keyframes pv-hero-orb {
   0%,
   100% {
@@ -377,7 +417,6 @@ body {
   animation: pv-hero-orb 6s ease-in-out infinite;
 }
 
-
 @keyframes pv-floating-card {
   0%,
   100% {
@@ -392,7 +431,6 @@ body {
 .pv-floating-card {
   animation: pv-floating-card 5s ease-in-out infinite;
 }
-
 
 @keyframes pv-orb-reverse {
   0%,
@@ -412,7 +450,7 @@ body {
 
 /* =========================================================
    PHOTO OF THE DAY
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-potd-heading {
   from {
@@ -434,7 +472,6 @@ body {
     both;
 }
 
-
 @keyframes pv-potd-badge {
   0%,
   100% {
@@ -450,7 +487,6 @@ body {
   animation: pv-potd-badge 4s ease-in-out infinite;
 }
 
-
 @keyframes pv-potd-card {
   from {
     opacity: 0;
@@ -464,14 +500,23 @@ body {
 }
 
 .pv-potd-card {
+  position: relative;
   animation:
     pv-potd-card
     1s
     cubic-bezier(0.22, 1, 0.36, 1)
     150ms
     both;
+  overflow: hidden;
 }
 
+/*
+  POTD is NOT a scroll container.
+*/
+
+.pv-potd-section {
+  overflow: visible;
+}
 
 @keyframes pv-potd-content {
   from {
@@ -497,7 +542,7 @@ body {
 
 /* =========================================================
    PHOTO CARD
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-heart-pop {
   0% {
@@ -517,6 +562,7 @@ body {
 }
 
 .pv-photo-card {
+  break-inside: avoid;
   transition:
     transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
     filter 0.5s ease,
@@ -530,7 +576,7 @@ body {
 
 /* =========================================================
    ABOUT
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-about-eyebrow {
   from {
@@ -549,7 +595,6 @@ body {
 .pv-about-eyebrow {
   animation: pv-about-eyebrow 0.7s ease-out both;
 }
-
 
 @keyframes pv-about-heading {
   from {
@@ -572,7 +617,6 @@ body {
     both;
 }
 
-
 @keyframes pv-about-intro {
   from {
     opacity: 0;
@@ -588,7 +632,6 @@ body {
 .pv-about-intro {
   animation: pv-about-intro 0.8s ease-out 250ms both;
 }
-
 
 @keyframes pv-about-panel {
   from {
@@ -611,7 +654,6 @@ body {
     both;
 }
 
-
 @keyframes pv-about-copy {
   from {
     opacity: 0;
@@ -633,7 +675,6 @@ body {
     both;
 }
 
-
 @keyframes pv-about-values {
   from {
     opacity: 0;
@@ -654,7 +695,6 @@ body {
     550ms
     both;
 }
-
 
 @keyframes pv-about-value {
   from {
@@ -680,7 +720,6 @@ body {
   animation: pv-about-value 0.6s ease-out 850ms both;
 }
 
-
 @keyframes pv-about-orb-one {
   0%,
   100% {
@@ -696,7 +735,6 @@ body {
   animation: pv-about-orb-one 8s ease-in-out infinite;
 }
 
-
 @keyframes pv-about-orb-two {
   0%,
   100% {
@@ -711,7 +749,6 @@ body {
 .pv-about-orb-two {
   animation: pv-about-orb-two 9s ease-in-out infinite;
 }
-
 
 @keyframes pv-about-border {
   from {
@@ -738,7 +775,7 @@ body {
 
 /* =========================================================
    FOOTER
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-footer-orb-one {
   0%,
@@ -808,7 +845,6 @@ body {
     both;
 }
 
-
 @keyframes pv-footer-heading {
   from {
     opacity: 0;
@@ -864,9 +900,7 @@ body {
 
 /* =========================================================
    UNIVERSAL BUTTON SHINE
-   IMPORTANT:
-   Gallery + Footer both use this class.
-========================================================= */
+   ========================================================= */
 
 .pv-button-shine {
   position: absolute;
@@ -895,7 +929,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    FOOTER FORM
-========================================================= */
+   ========================================================= */
 
 .pv-contact-card {
   transition:
@@ -907,7 +941,6 @@ button:hover > .pv-button-shine,
 .pv-contact-card:hover {
   transform: translateY(-2px);
 }
-
 
 @keyframes pv-form-glow {
   0%,
@@ -926,7 +959,6 @@ button:hover > .pv-button-shine,
   animation: pv-form-glow 5s ease-in-out infinite;
 }
 
-
 .pv-input-wrap {
   position: relative;
 }
@@ -934,18 +966,13 @@ button:hover > .pv-button-shine,
 .pv-input-number {
   position: absolute;
   z-index: 5;
-
   left: 12px;
   top: 50%;
-
   transform: translateY(-50%);
-
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.08em;
-
   color: rgba(139, 92, 246, 0.55);
-
   pointer-events: none;
 
   transition:
@@ -958,9 +985,6 @@ button:hover > .pv-button-shine,
   top: 17px;
   transform: none;
 }
-
-
-/* INPUT */
 
 .pv-contact-input {
   position: relative;
@@ -978,7 +1002,6 @@ button:hover > .pv-button-shine,
 
 .pv-contact-input:focus {
   transform: translateY(-2px) scale(1.005);
-
   border-color: rgba(139, 92, 246, 0.65);
 
   box-shadow:
@@ -1004,15 +1027,11 @@ button:hover > .pv-button-shine,
 
 .pv-input-wrap::after {
   content: "";
-
   position: absolute;
-
   left: 10px;
   right: 10px;
   bottom: 0;
-
   height: 1px;
-
   border-radius: 999px;
 
   background: linear-gradient(
@@ -1025,7 +1044,6 @@ button:hover > .pv-button-shine,
 
   transform: scaleX(0);
   transform-origin: center;
-
   opacity: 0;
 
   transition:
@@ -1047,10 +1065,8 @@ button:hover > .pv-button-shine,
 
 .pv-send-button::before {
   content: "";
-
   position: absolute;
   inset: 0;
-
   border-radius: inherit;
 
   background: linear-gradient(
@@ -1062,7 +1078,6 @@ button:hover > .pv-button-shine,
   );
 
   opacity: 0;
-
   transition: opacity 0.3s ease;
 }
 
@@ -1149,13 +1164,10 @@ button:hover > .pv-button-shine,
 
 .pv-social-icon {
   display: flex;
-
   height: 44px;
   width: 44px;
-
   align-items: center;
   justify-content: center;
-
   border-width: 1px;
   border-radius: 9999px;
 
@@ -1207,7 +1219,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    GALLERY
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-gallery-eyebrow {
   from {
@@ -1226,7 +1238,6 @@ button:hover > .pv-button-shine,
 .pv-gallery-eyebrow {
   animation: pv-gallery-eyebrow 0.7s ease-out both;
 }
-
 
 @keyframes pv-gallery-heading {
   from {
@@ -1248,7 +1259,6 @@ button:hover > .pv-button-shine,
     100ms
     both;
 }
-
 
 @keyframes pv-gallery-description {
   from {
@@ -1272,7 +1282,9 @@ button:hover > .pv-button-shine,
 }
 
 
-/* GALLERY CONTROLS */
+/* =========================================================
+   GALLERY CONTROLS
+   ========================================================= */
 
 @keyframes pv-gallery-controls {
   from {
@@ -1297,9 +1309,6 @@ button:hover > .pv-button-shine,
     both;
 }
 
-
-/* Animated border */
-
 @keyframes pv-gallery-border-flow {
   from {
     background-position: 200% 0;
@@ -1312,12 +1321,9 @@ button:hover > .pv-button-shine,
 
 .pv-gallery-controls::before {
   content: "";
-
   position: absolute;
   inset: 0;
-
   pointer-events: none;
-
   border-radius: inherit;
 
   background: linear-gradient(
@@ -1377,7 +1383,6 @@ button:hover > .pv-button-shine,
     both;
 }
 
-
 @keyframes pv-page-dot {
   0%,
   100% {
@@ -1393,12 +1398,9 @@ button:hover > .pv-button-shine,
 
 .pv-page-dot {
   display: inline-block;
-
   width: 5px;
   height: 5px;
-
   margin-left: 8px;
-
   border-radius: 999px;
 
   background: rgb(139 92 246);
@@ -1416,7 +1418,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    GALLERY SEARCH
-========================================================= */
+   ========================================================= */
 
 .pv-gallery-search-wrap {
   transition:
@@ -1451,15 +1453,11 @@ button:hover > .pv-button-shine,
 
 .pv-gallery-search-wrap::after {
   content: "";
-
   position: absolute;
-
   left: 14px;
   right: 14px;
   bottom: 0;
-
   height: 2px;
-
   border-radius: 999px;
 
   background: linear-gradient(
@@ -1472,7 +1470,6 @@ button:hover > .pv-button-shine,
 
   transform: scaleX(0);
   transform-origin: center;
-
   opacity: 0;
 
   transition:
@@ -1486,7 +1483,7 @@ button:hover > .pv-button-shine,
 }
 
 
-/* CLEAR BUTTON */
+/* CLEAR */
 
 .pv-gallery-clear {
   transition:
@@ -1513,7 +1510,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    FAVORITES
-========================================================= */
+   ========================================================= */
 
 .pv-gallery-favorite {
   transition:
@@ -1533,7 +1530,6 @@ button:hover > .pv-button-shine,
 .pv-gallery-favorite:active {
   transform: translateY(0) scale(0.96);
 }
-
 
 .pv-heart-icon {
   display: inline-block;
@@ -1556,7 +1552,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    MOOD BUTTONS
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-mood-enter {
   from {
@@ -1598,7 +1594,6 @@ button:hover > .pv-button-shine,
     translateY(-1px)
     scale(0.96);
 }
-
 
 .pv-mood-icon {
   display: inline-block;
@@ -1656,7 +1651,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    GALLERY GRID
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-grid-reveal {
   from {
@@ -1680,7 +1675,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    GALLERY LOADER
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-gallery-spin {
   to {
@@ -1718,7 +1713,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    EMPTY STATE
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-empty-state {
   from {
@@ -1739,7 +1734,6 @@ button:hover > .pv-button-shine,
     cubic-bezier(0.22, 1, 0.36, 1)
     both;
 }
-
 
 @keyframes pv-empty-icon {
   0%,
@@ -1763,7 +1757,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    RESET BUTTON
-========================================================= */
+   ========================================================= */
 
 .pv-reset-button {
   transition:
@@ -1774,7 +1768,6 @@ button:hover > .pv-button-shine,
 
 .pv-reset-button:hover {
   transform: translateY(-3px);
-
   background-color: rgb(37 99 235);
 
   box-shadow:
@@ -1790,7 +1783,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    PAGINATION
-========================================================= */
+   ========================================================= */
 
 @keyframes pv-pagination-enter {
   from {
@@ -1816,7 +1809,7 @@ button:hover > .pv-button-shine,
 
 /* =========================================================
    GLOBAL BUTTON FEEDBACK
-========================================================= */
+   ========================================================= */
 
 button {
   -webkit-tap-highlight-color: transparent;
@@ -1828,37 +1821,52 @@ button:active {
 
 
 /* =========================================================
+   AUTO SCROLL SAFETY
+   ========================================================= */
+
+/*
+  Horizontal animation is isolated.
+  It must NOT become a vertical scroll container.
+*/
+
+.pv-auto-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.pv-auto-scroll-viewport {
+  position: relative;
+  width: 100%;
+  overflow: clip;
+}
+
+
+/* =========================================================
    REDUCED MOTION
-========================================================= */
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: auto;
+    scroll-behavior: auto !important;
   }
 
-  /* Global */
   .animate-pixelvault-scroll,
   .pixelvault-float,
   .pixelvault-glow,
   .pv-orb,
   .pv-glow,
   .animate-pv-navbar-shimmer,
-
-  /* Hero */
   .pv-hero-reveal,
   .pv-hero-image,
   .pv-line-grow,
   .pv-hero-orb,
   .pv-floating-card,
   .pv-orb-reverse,
-
-  /* POTD */
   .pv-potd-heading,
   .pv-potd-badge,
   .pv-potd-card,
   .pv-potd-content,
-
-  /* About */
   .pv-about-eyebrow,
   .pv-about-main-heading,
   .pv-about-intro,
@@ -1869,8 +1877,6 @@ button:active {
   .pv-about-orb-one,
   .pv-about-orb-two,
   .pv-about-border,
-
-  /* Footer */
   .pv-footer-orb-one,
   .pv-footer-orb-two,
   .pv-footer-orb-three,
@@ -1882,8 +1888,6 @@ button:active {
   .pv-footer-column,
   .pv-footer-bottom,
   .pv-form-result,
-
-  /* Gallery */
   .pv-gallery-eyebrow,
   .pv-gallery-heading,
   .pv-gallery-description,
@@ -1898,22 +1902,18 @@ button:active {
   .pv-empty-state,
   .pv-empty-icon,
   .pv-gallery-pagination {
-
     animation: none !important;
   }
 
-  /* Gallery animated pseudo-element */
   .pv-gallery-controls::before {
     animation: none !important;
   }
 
-  /* Photo cards */
   .pv-photo-card,
   .pv-photo-card * {
     animation: none !important;
   }
 
-  /* Interactive elements */
   .pv-gallery-search-wrap,
   .pv-gallery-search,
   .pv-gallery-clear,

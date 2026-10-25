@@ -1,5 +1,5 @@
-
 import React, { useEffect, useState } from "react";
+import { useLenis } from "lenis/react";
 
 const Navbar = ({
   darkMode,
@@ -9,39 +9,86 @@ const Navbar = ({
   const [scrolled, setScrolled] = useState(false);
   const [searchText, setSearchText] = useState("");
 
+  const lenis = useLenis();
+
+  /* =========================================================
+     LENIS SCROLL STATE
+  ========================================================= */
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+  if (!lenis) return;
 
-    window.addEventListener("scroll", handleScroll);
+  const update = ({ scroll }) => {
+    setScrolled(scroll > 20);
+  };
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  update({ scroll: lenis.scroll });
+
+  lenis.on("scroll", update);
+
+  return () => {
+    lenis.off("scroll", update);
+  };
+}, [lenis]);
+
+  /* =========================================================
+     LENIS NAVIGATION
+  ========================================================= */
+
+  const handleNavScroll = (event, target) => {
+    event.preventDefault();
+
+    if (!lenis) return;
+
+    const element = document.querySelector(target);
+
+    if (!element) return;
+
+    lenis.stop();
+
+    requestAnimationFrame(() => {
+      lenis.start();
+
+      lenis.scrollTo(element, {
+        offset: -20,
+        duration: 1.1,
+        immediate: false,
+      });
+    });
+  };
+
+  /* =========================================================
+     SEARCH
+  ========================================================= */
 
   const handleSearch = () => {
     const query = searchText.trim();
 
-    if (!query) {
-      return;
-    }
+    if (!query) return;
 
-    // Send search to App.jsx
     setSearchQuery(query);
 
-    // Scroll to Gallery after search is triggered
-    setTimeout(() => {
-      document.getElementById("gallery")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
+    /*
+      Gallery already exists in the DOM.
+      Wait two frames so React can commit the query update.
+    */
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const gallery = document.getElementById("gallery");
+
+        if (!gallery || !lenis) return;
+
+        lenis.scrollTo(gallery, {
+          offset: -20,
+          duration: 1.1,
+          immediate: false,
+        });
       });
-    }, 150);
+    });
   };
 
-  const handleSearchKeyDown = (e) => {
-    if (e.key === "Enter") {
+  const handleSearchKeyDown = (event) => {
+    if (event.key === "Enter") {
       handleSearch();
     }
   };
@@ -57,13 +104,20 @@ const Navbar = ({
         rounded-2xl border
         backdrop-blur-2xl
         transition-all duration-500 ease-out
-        ${scrolled ? "translate-y-0 scale-[0.995]" : "translate-y-0 scale-100"}
+
+        ${
+          scrolled
+            ? "translate-y-0 scale-[0.995]"
+            : "translate-y-0 scale-100"
+        }
+
         ${
           darkMode
             ? `
               border-white/[0.08]
               bg-[#071126]/70
               shadow-[0_15px_50px_rgba(0,0,0,0.35)]
+
               ${
                 scrolled
                   ? "shadow-[0_20px_70px_rgba(79,70,229,0.15)]"
@@ -74,6 +128,7 @@ const Navbar = ({
               border-white/80
               bg-white/70
               shadow-[0_15px_50px_rgba(79,70,229,0.10)]
+
               ${
                 scrolled
                   ? "shadow-[0_20px_70px_rgba(79,70,229,0.18)]"
@@ -83,10 +138,15 @@ const Navbar = ({
         }
       `}
     >
-      {/* TOP GRADIENT LINE */}
+      {/* =====================================================
+          TOP GRADIENT LINE
+      ===================================================== */}
+
       <div
         className="
-          absolute left-1/2 top-0 h-[1px] w-2/3
+          pointer-events-none
+          absolute left-1/2 top-0
+          h-[1px] w-2/3
           -translate-x-1/2
           overflow-hidden
           bg-gradient-to-r
@@ -107,11 +167,17 @@ const Navbar = ({
         />
       </div>
 
+      {/* =====================================================
+          NAVBAR CONTENT
+      ===================================================== */}
+
       <div className="flex h-[68px] items-center justify-between px-4 sm:px-6 lg:px-8">
 
         {/* LOGO */}
+
         <a
           href="#home"
+          onClick={(event) => handleNavScroll(event, "#home")}
           className="
             group flex items-center gap-3
             transition-transform duration-300
@@ -120,7 +186,8 @@ const Navbar = ({
         >
           <div
             className="
-              relative flex h-10 w-10 items-center justify-center
+              relative flex h-10 w-10
+              items-center justify-center
               rounded-xl
               bg-gradient-to-br
               from-violet-500
@@ -146,9 +213,12 @@ const Navbar = ({
 
             <div
               className="
-                absolute inset-0 rounded-xl
+                pointer-events-none
+                absolute inset-0
+                rounded-xl
                 bg-white/20
-                opacity-0 blur-md
+                opacity-0
+                blur-md
                 transition-all duration-500
                 group-hover:scale-125
                 group-hover:opacity-100
@@ -162,11 +232,7 @@ const Navbar = ({
                 text-lg font-bold tracking-tight
                 transition-all duration-300
                 group-hover:tracking-wide
-                ${
-                  darkMode
-                    ? "text-white"
-                    : "text-slate-950"
-                }
+                ${darkMode ? "text-white" : "text-slate-950"}
               `}
             >
               Pixel<span className="pv-gradient-text">Vault</span>
@@ -178,11 +244,7 @@ const Navbar = ({
                 tracking-[0.28em]
                 transition-all duration-300
                 group-hover:tracking-[0.38em]
-                ${
-                  darkMode
-                    ? "text-slate-500"
-                    : "text-slate-400"
-                }
+                ${darkMode ? "text-slate-500" : "text-slate-400"}
               `}
             >
               Visual Stories
@@ -191,100 +253,60 @@ const Navbar = ({
         </a>
 
         {/* NAV LINKS */}
+
         <div className="hidden items-center gap-1 md:flex">
 
-          {/* HOME */}
-          <a
-            href="#home"
-            className={`
-              group relative rounded-full px-4 py-2
-              text-sm font-medium
-              transition-all duration-300
-              hover:-translate-y-0.5
-              ${
-                darkMode
-                  ? "text-slate-400 hover:bg-white/5 hover:text-white"
-                  : "text-slate-500 hover:bg-violet-50 hover:text-violet-600"
+          {[
+            ["Home", "#home"],
+            ["Gallery", "#gallery"],
+            ["About", "#about"],
+          ].map(([label, target]) => (
+            <a
+              key={target}
+              href={target}
+              onClick={(event) =>
+                handleNavScroll(event, target)
               }
-            `}
-          >
-            Home
-
-            <span
-              className="
-                absolute bottom-1 left-1/2 h-[2px] w-0
-                -translate-x-1/2 rounded-full
-                bg-gradient-to-r from-violet-500 to-blue-500
-                shadow-[0_0_8px_rgba(124,58,237,0.5)]
+              className={`
+                group relative rounded-full px-4 py-2
+                text-sm font-medium
                 transition-all duration-300
-                group-hover:w-5
-              "
-            />
-          </a>
+                hover:-translate-y-0.5
+                ${
+                  darkMode
+                    ? "text-slate-400 hover:bg-white/5 hover:text-white"
+                    : "text-slate-500 hover:bg-violet-50 hover:text-violet-600"
+                }
+              `}
+            >
+              {label}
 
-          {/* GALLERY */}
-          <a
-            href="#gallery"
-            className={`
-              group relative rounded-full px-4 py-2
-              text-sm font-medium
-              transition-all duration-300
-              hover:-translate-y-0.5
-              ${
-                darkMode
-                  ? "text-slate-400 hover:bg-white/5 hover:text-white"
-                  : "text-slate-500 hover:bg-violet-50 hover:text-violet-600"
-              }
-            `}
-          >
-            Gallery
+              <span
+                className="
+                  pointer-events-none
+                  absolute bottom-1 left-1/2
+                  h-[2px] w-0
+                  -translate-x-1/2
+                  rounded-full
+                  bg-gradient-to-r
+                  from-violet-500
+                  to-blue-500
+                  shadow-[0_0_8px_rgba(124,58,237,0.5)]
+                  transition-all duration-300
+                  group-hover:w-5
+                "
+              />
+            </a>
+          ))}
 
-            <span
-              className="
-                absolute bottom-1 left-1/2 h-[2px] w-0
-                -translate-x-1/2 rounded-full
-                bg-gradient-to-r from-violet-500 to-blue-500
-                shadow-[0_0_8px_rgba(124,58,237,0.5)]
-                transition-all duration-300
-                group-hover:w-5
-              "
-            />
-          </a>
-
-          {/* ABOUT */}
-          <a
-            href="#about"
-            className={`
-              group relative rounded-full px-4 py-2
-              text-sm font-medium
-              transition-all duration-300
-              hover:-translate-y-0.5
-              ${
-                darkMode
-                  ? "text-slate-400 hover:bg-white/5 hover:text-white"
-                  : "text-slate-500 hover:bg-violet-50 hover:text-violet-600"
-              }
-            `}
-          >
-            About
-
-            <span
-              className="
-                absolute bottom-1 left-1/2 h-[2px] w-0
-                -translate-x-1/2 rounded-full
-                bg-gradient-to-r from-violet-500 to-blue-500
-                shadow-[0_0_8px_rgba(124,58,237,0.5)]
-                transition-all duration-300
-                group-hover:w-5
-              "
-            />
-          </a>
         </div>
 
         {/* RIGHT SIDE */}
+
         <div className="flex items-center gap-2">
 
           {/* SEARCH */}
+
           <div
             className={`
               hidden h-10 items-center gap-2
@@ -313,7 +335,6 @@ const Navbar = ({
               }
             `}
           >
-            {/* SEARCH ICON */}
             <button
               type="button"
               onClick={handleSearch}
@@ -342,11 +363,12 @@ const Navbar = ({
               </svg>
             </button>
 
-            {/* INPUT */}
             <input
               type="text"
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(event) =>
+                setSearchText(event.target.value)
+              }
               onKeyDown={handleSearchKeyDown}
               placeholder="Search beautiful photos..."
               aria-label="Search beautiful photos"
@@ -362,7 +384,6 @@ const Navbar = ({
               `}
             />
 
-            {/* CLEAR */}
             {searchText && (
               <button
                 type="button"
@@ -385,8 +406,10 @@ const Navbar = ({
             )}
           </div>
 
-          {/* THEME BUTTON */}
+          {/* THEME */}
+
           <button
+            type="button"
             onClick={() => setDarkMode(!darkMode)}
             aria-label="Toggle theme"
             className={`
@@ -431,6 +454,7 @@ const Navbar = ({
 
             <span
               className="
+                pointer-events-none
                 absolute inset-0
                 bg-gradient-to-br
                 from-violet-500/20

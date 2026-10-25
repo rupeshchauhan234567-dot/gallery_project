@@ -1,15 +1,38 @@
-
 import React, { useState } from "react";
+import { useLenis } from "lenis/react";
 
 const Footer = ({ darkMode }) => {
   const [result, setResult] = useState("");
   const [isSending, setIsSending] = useState(false);
 
+  const lenis = useLenis();
+
+  /* =========================================================
+     LENIS FOOTER NAVIGATION
+  ========================================================= */
+
   const scrollToSection = (id) => {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: "smooth",
+  const element = document.getElementById(id);
+
+  if (!element) return;
+
+  if (lenis) {
+    lenis.scrollTo(element, {
+      offset: -20,
+      duration: 1.1,
     });
-  };
+    return;
+  }
+
+  element.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+};
+
+  /* =========================================================
+     CONTACT FORM
+  ========================================================= */
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -43,12 +66,15 @@ const Footer = ({ darkMode }) => {
         console.log("Error", data);
 
         setResult(
-          data.message || "Something went wrong. Please try again."
+          data.message ||
+            "Something went wrong. Please try again."
         );
       }
     } catch (error) {
       console.log("Form error:", error);
-      setResult("Something went wrong. Please try again.");
+      setResult(
+        "Something went wrong. Please try again."
+      );
     } finally {
       setIsSending(false);
     }
@@ -57,9 +83,8 @@ const Footer = ({ darkMode }) => {
   return (
     <footer className="relative mt-10 overflow-hidden">
 
-      {/* =========================================
-          AMBIENT FOOTER BACKGROUND
-      ========================================= */}
+      {/* AMBIENT BACKGROUND */}
+
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className={`
@@ -90,42 +115,34 @@ const Footer = ({ darkMode }) => {
         />
       </div>
 
-      {/* =========================================
-          CONTACT / CTA
-      ========================================= */}
-      <section className="relative mx-auto max-w-7xl px-6 pb-20 lg:px-8">
+      {/* CONTACT / CTA */}
 
+      <section className="relative mx-auto max-w-7xl px-6 pb-20 lg:px-8">
         <div
           className={`
             pv-footer-cta
             relative overflow-hidden rounded-[2rem]
-            border
+            border backdrop-blur-2xl
             ${
               darkMode
                 ? "border-white/10 bg-white/[0.035]"
                 : "border-slate-200/70 bg-white/75"
             }
-            backdrop-blur-2xl
           `}
         >
-
-          {/* Animated border */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2rem]">
             <div className="pv-footer-border absolute inset-y-0 -left-full w-1/2" />
           </div>
 
-          {/* Inner glows */}
           <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-violet-500/10 blur-[100px]" />
 
           <div className="pointer-events-none absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-blue-500/10 blur-[100px]" />
 
           <div className="relative z-10 p-6 sm:p-10 lg:p-12">
 
-            {/* =====================================
-                CTA HEADER
-            ===================================== */}
-            <div className="pv-footer-heading text-center">
+            {/* CTA HEADER */}
 
+            <div className="pv-footer-heading text-center">
               <p className="
                 text-xs font-semibold uppercase
                 tracking-[0.3em] text-violet-400
@@ -158,8 +175,8 @@ const Footer = ({ darkMode }) => {
                 your eye, and make it part of your collection.
               </p>
 
-              {/* CTA BUTTON */}
               <button
+                type="button"
                 onClick={() => scrollToSection("gallery")}
                 className="
                   pv-footer-explore-btn
@@ -188,34 +205,26 @@ const Footer = ({ darkMode }) => {
               </button>
             </div>
 
-            {/* =====================================
-                COMPACT CONTACT FORM
-            ===================================== */}
-            <div className="mx-auto mt-10 max-w-4xl">
+            {/* CONTACT FORM */}
 
+            <div className="mx-auto mt-10 max-w-4xl">
               <div
                 className={`
                   pv-contact-card
                   relative overflow-hidden
                   rounded-2xl border
-                  p-4 sm:p-5
+                  p-4 sm:p-5 backdrop-blur-xl
                   ${
                     darkMode
                       ? "border-white/10 bg-black/10"
                       : "border-slate-200/80 bg-white/65"
                   }
-                  backdrop-blur-xl
                 `}
               >
-
-                {/* Form glow */}
                 <div className="pv-form-glow pointer-events-none absolute -right-20 -top-20 h-40 w-40 rounded-full bg-violet-500/10 blur-[70px]" />
 
                 <div className="relative z-10">
-
-                  {/* FORM HEADER */}
                   <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-
                     <div>
                       <p className="
                         text-[10px] font-semibold uppercase
@@ -244,17 +253,16 @@ const Footer = ({ darkMode }) => {
                     </p>
                   </div>
 
-                  {/* FORM */}
                   <form
                     onSubmit={onSubmit}
                     className="space-y-2.5"
                   >
-
-                    {/* NAME + EMAIL */}
                     <div className="grid gap-2.5 sm:grid-cols-2">
 
                       <div className="pv-input-wrap">
-                        <span className="pv-input-number">01</span>
+                        <span className="pv-input-number">
+                          01
+                        </span>
 
                         <input
                           type="text"
@@ -264,8 +272,7 @@ const Footer = ({ darkMode }) => {
                           className={`
                             pv-contact-input
                             h-11 w-full rounded-xl border
-                            px-4 pl-10 text-sm
-                            outline-none
+                            px-4 pl-10 text-sm outline-none
                             ${
                               darkMode
                                 ? "border-white/10 bg-white/[0.035] text-white placeholder:text-gray-600"
@@ -276,7 +283,9 @@ const Footer = ({ darkMode }) => {
                       </div>
 
                       <div className="pv-input-wrap">
-                        <span className="pv-input-number">02</span>
+                        <span className="pv-input-number">
+                          02
+                        </span>
 
                         <input
                           type="email"
@@ -286,8 +295,7 @@ const Footer = ({ darkMode }) => {
                           className={`
                             pv-contact-input
                             h-11 w-full rounded-xl border
-                            px-4 pl-10 text-sm
-                            outline-none
+                            px-4 pl-10 text-sm outline-none
                             ${
                               darkMode
                                 ? "border-white/10 bg-white/[0.035] text-white placeholder:text-gray-600"
@@ -299,7 +307,6 @@ const Footer = ({ darkMode }) => {
 
                     </div>
 
-                    {/* MESSAGE */}
                     <div className="pv-input-wrap">
                       <span className="pv-input-number pv-message-number">
                         03
@@ -325,17 +332,13 @@ const Footer = ({ darkMode }) => {
                       />
                     </div>
 
-                    {/* FORM BOTTOM */}
                     <div className="flex flex-col gap-2 pt-1 sm:flex-row sm:items-center sm:justify-between">
 
-                      {/* RESULT */}
                       <div className="min-h-[18px]">
-
                         {result && (
                           <p
                             className={`
-                              pv-form-result
-                              text-xs
+                              pv-form-result text-xs
                               ${
                                 result.includes("successfully")
                                   ? "text-emerald-400"
@@ -354,20 +357,16 @@ const Footer = ({ darkMode }) => {
                             {result}
                           </p>
                         )}
-
                       </div>
 
-                      {/* SEND BUTTON */}
                       <button
                         type="submit"
                         disabled={isSending}
                         className="
                           pv-send-button
-                          group relative
-                          inline-flex items-center
-                          justify-center
-                          overflow-hidden
-                          rounded-full
+                          group relative inline-flex
+                          items-center justify-center
+                          overflow-hidden rounded-full
                           bg-gradient-to-r
                           from-violet-600 to-blue-600
                           px-6 py-2.5
@@ -383,7 +382,9 @@ const Footer = ({ darkMode }) => {
                         "
                       >
                         <span className="relative z-10">
-                          {isSending ? "Sending..." : "Send Message"}
+                          {isSending
+                            ? "Sending..."
+                            : "Send Message"}
 
                           {!isSending && (
                             <span className="
@@ -399,7 +400,6 @@ const Footer = ({ darkMode }) => {
 
                         <span className="pv-button-shine" />
                       </button>
-
                     </div>
                   </form>
                 </div>
@@ -410,9 +410,8 @@ const Footer = ({ darkMode }) => {
         </div>
       </section>
 
-      {/* =========================================
-          FOOTER
-      ========================================= */}
+      {/* FOOTER */}
+
       <div
         className={`
           relative border-t
@@ -423,16 +422,15 @@ const Footer = ({ darkMode }) => {
           }
         `}
       >
-
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
 
-          {/* FOOTER GRID */}
           <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
 
             {/* BRAND */}
-            <div className="pv-footer-column">
 
+            <div className="pv-footer-column">
               <button
+                type="button"
                 onClick={() => scrollToSection("home")}
                 className="
                   group text-left
@@ -469,6 +467,7 @@ const Footer = ({ darkMode }) => {
 
               <div className="mt-6 flex items-center gap-2">
                 <span className="h-px w-10 bg-gradient-to-r from-violet-500 to-blue-500" />
+
                 <span
                   className={`
                     text-[10px] uppercase tracking-[0.25em]
@@ -481,8 +480,8 @@ const Footer = ({ darkMode }) => {
             </div>
 
             {/* NAVIGATION */}
-            <div className="pv-footer-column">
 
+            <div className="pv-footer-column">
               <h3
                 className={`
                   text-sm font-semibold
@@ -493,14 +492,14 @@ const Footer = ({ darkMode }) => {
               </h3>
 
               <div className="mt-4 space-y-3">
-
                 {[
                   ["Home", "home"],
                   ["Gallery", "gallery"],
                   ["About", "about"],
-                ].map(([label, id], index) => (
+                ].map(([label, id]) => (
                   <button
                     key={id}
+                    type="button"
                     onClick={() => scrollToSection(id)}
                     className={`
                       pv-footer-link
@@ -515,13 +514,12 @@ const Footer = ({ darkMode }) => {
                     {label}
                   </button>
                 ))}
-
               </div>
             </div>
 
             {/* SOCIAL */}
-            <div className="pv-footer-column">
 
+            <div className="pv-footer-column">
               <h3
                 className={`
                   text-sm font-semibold
@@ -533,7 +531,6 @@ const Footer = ({ darkMode }) => {
 
               <div className="mt-5 flex items-center gap-3">
 
-                {/* INSTAGRAM */}
                 <a
                   href="https://www.instagram.com/"
                   target="_blank"
@@ -541,9 +538,10 @@ const Footer = ({ darkMode }) => {
                   aria-label="Instagram"
                   className={`
                     pv-social-icon
-                    ${darkMode
-                      ? "border-white/10 bg-white/[0.04] text-gray-400 hover:border-pink-400/40 hover:bg-pink-500/10 hover:text-pink-400"
-                      : "border-slate-200 bg-white text-slate-500 hover:border-pink-300 hover:bg-pink-50 hover:text-pink-500"
+                    ${
+                      darkMode
+                        ? "border-white/10 bg-white/[0.04] text-gray-400 hover:border-pink-400/40 hover:bg-pink-500/10 hover:text-pink-400"
+                        : "border-slate-200 bg-white text-slate-500 hover:border-pink-300 hover:bg-pink-50 hover:text-pink-500"
                     }
                   `}
                 >
@@ -571,7 +569,6 @@ const Footer = ({ darkMode }) => {
                   </svg>
                 </a>
 
-                {/* FACEBOOK */}
                 <a
                   href="https://www.facebook.com/"
                   target="_blank"
@@ -579,9 +576,10 @@ const Footer = ({ darkMode }) => {
                   aria-label="Facebook"
                   className={`
                     pv-social-icon
-                    ${darkMode
-                      ? "border-white/10 bg-white/[0.04] text-gray-400 hover:border-blue-400/40 hover:bg-blue-500/10 hover:text-blue-400"
-                      : "border-slate-200 bg-white text-slate-500 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-500"
+                    ${
+                      darkMode
+                        ? "border-white/10 bg-white/[0.04] text-gray-400 hover:border-blue-400/40 hover:bg-blue-500/10 hover:text-blue-400"
+                        : "border-slate-200 bg-white text-slate-500 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-500"
                     }
                   `}
                 >
@@ -594,7 +592,6 @@ const Footer = ({ darkMode }) => {
                   </svg>
                 </a>
 
-                {/* WHATSAPP */}
                 <a
                   href="https://web.whatsapp.com/"
                   target="_blank"
@@ -602,9 +599,10 @@ const Footer = ({ darkMode }) => {
                   aria-label="WhatsApp"
                   className={`
                     pv-social-icon
-                    ${darkMode
-                      ? "border-white/10 bg-white/[0.04] text-gray-400 hover:border-green-400/40 hover:bg-green-500/10 hover:text-green-400"
-                      : "border-slate-200 bg-white text-slate-500 hover:border-green-300 hover:bg-green-50 hover:text-green-500"
+                    ${
+                      darkMode
+                        ? "border-white/10 bg-white/[0.04] text-gray-400 hover:border-green-400/40 hover:bg-green-500/10 hover:text-green-400"
+                        : "border-slate-200 bg-white text-slate-500 hover:border-green-300 hover:bg-green-50 hover:text-green-500"
                     }
                   `}
                 >
@@ -616,7 +614,6 @@ const Footer = ({ darkMode }) => {
                     <path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L.2 24l6.5-1.7c1.7.9 3.5 1.3 5.4 1.3h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.3ZM12.2 21.5c-1.7 0-3.4-.5-4.8-1.3l-.3-.2-3.8 1 1-3.7-.2-.3a9.7 9.7 0 1 1 8.1 4.5Zm5.3-7.3c-.3-.2-1.7-.9-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.3-.3-.5.3-.5.8-1.6.1-.2.1-.4 0-.6-.1-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.8s1.2 3.2 1.4 3.4c.2.2 2.3 3.6 5.6 5 .8.4 1.5.6 2 .8.8.3 1.7-.7 1.9-1.4.2-.7.2-1.3.1-1.4 0-.2-.2-.3-.5-.4Z" />
                   </svg>
                 </a>
-
               </div>
 
               <p
@@ -631,6 +628,7 @@ const Footer = ({ darkMode }) => {
           </div>
 
           {/* BOTTOM BAR */}
+
           <div
             className={`
               pv-footer-bottom
@@ -671,4 +669,3 @@ const Footer = ({ darkMode }) => {
 };
 
 export default Footer;
-
